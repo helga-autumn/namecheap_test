@@ -93,6 +93,10 @@ describe('Autorization page (Welcome back!)', function () {
 
         cy.wait('@waitForLogout');
     });
+    
+    after(function () {
+        cy.logout(validUser);
+    });
 });
 
 describe('My profile page. Client area', function () {
@@ -145,13 +149,7 @@ describe('My profile page. Client area', function () {
             });
         });
 
-        profilePage.getUserMenuFromHeader(validUser.email).click();
-
-        cy.intercept('/authorize/logout').as('waitForLogout');
-
-        authPage.getLogoutButton().click();
-
-        cy.wait('@waitForLogout');
+        cy.logout(validUser);
     });
 
     it('After click on "Profile" opened page "Profile" should be displayed', function () {
