@@ -84,14 +84,6 @@ describe('Autorization page (Welcome back!)', function () {
         cy.login(validUser);
 
         authPage.getAuthorizedUserEmailInHeader(validUser.email).should('be.visible');
-
-        profilePage.getUserMenuFromHeader(validUser.email).click();
-
-        cy.intercept('/authorize/logout').as('waitForLogout');
-
-        authPage.getLogoutButton().click();
-
-        cy.wait('@waitForLogout');
     });
     
     after(function () {
