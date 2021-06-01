@@ -24,10 +24,13 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import AuthPage from "./PageObjects/AuthPage";
+import ProfilePage from "./PageObjects/ProfilePage";
+
+const authPage = new AuthPage();
+const profilePage = new ProfilePage();
+
 
 Cypress.Commands.add('login', (loginData) => {
-    const authPage = new AuthPage();
-
     authPage.getAuthPageFromHeaderMenu().click();
 
     authPage.getEmailInput()
@@ -39,4 +42,14 @@ Cypress.Commands.add('login', (loginData) => {
         .type(loginData.password);
 
     authPage.getSubmitButton().click();
-})
+});
+
+Cypress.Commands.add('logout', (logoutData) => {
+    profilePage.getUserMenuFromHeader(logoutData.email).click();
+
+    cy.intercept('/authorize/logout').as('waitForLogout');
+
+    authPage.getLogoutButton().click();
+
+    cy.wait('@waitForLogout');
+});
